@@ -9,29 +9,14 @@
 
 		// Edit button in view mode
 		$(".question-view .edit").on("click", function() {
-			var question = $(this).parent().parent();
-			var questionView = question.find(".question-view");
-			var questionEdit = question.find(".question-edit");
-
-			question.css("background", "#fff4c2");
-
-			questionView.css("display", "none");
-			questionEdit.css("display", "block");
+			closeAllEdits();
+			editQuestion( $(this).parent().parent() );
 		});
 
 		// Edit and Done button in edit mode
 		$(".question-edit .edit, .question-edit .done").on("click", function() {
-			var question = $(this).parent().parent();
-			var questionView = question.find(".question-view");
-			var questionEdit = question.find(".question-edit");
-
-			questionView.find(".title").html( questionEdit.find(".title").val() );
-			questionView.find(".help").html( questionEdit.find(".help").val() );
-
-			question.css("background", "white");
-
-			questionView.css("display", "block");
-			questionEdit.css("display", "none");
+			closeAllEdits();
+			viewQuestion( $(this).parent().parent() );
 		});
 
 		// Delete button
@@ -43,15 +28,48 @@
 
 		// Change color on mouse over
 		$(".question").on("mouseenter", function() {
-			if( $(".question").find(".question-view").css("display") == "block" ) {
+			if( $(this).find(".question-view").css("display") == "block" ) {
 				$(this).css("background", "#fff9dd");
 			}
 		});
 
 		$(".question").on("mouseleave", function() {
-			if( $(".question").find(".question-view").css("display") == "block" ) {
+			if( $(this).find(".question-view").css("display") == "block" ) {
 				$(this).css("background", "white");
 			}
+		});
+	}
+
+
+	var viewQuestion = function( question ) {
+		var questionView = question.find(".question-view");
+		var questionEdit = question.find(".question-edit");
+
+		// Copy data
+		questionView.find(".title").html( questionEdit.find(".title").val() );
+		questionView.find(".help").html( questionEdit.find(".help").val() );
+
+		question.css("background", "white");
+
+		questionView.css("display", "block");
+		questionEdit.css("display", "none");
+	}
+
+
+	var editQuestion = function( question ) {
+		var questionView = question.find(".question-view");
+		var questionEdit = question.find(".question-edit");
+
+		question.css("background", "#fff4c2");
+
+		questionView.css("display", "none");
+		questionEdit.css("display", "block");
+	}
+
+
+	var closeAllEdits = function() {
+		$(".question").each(function() {
+			viewQuestion( $(this) );
 		});
 	}
 
@@ -64,6 +82,8 @@
 			text     : ".text-question",
 			paragraph: ".paragraph-question"
 		};
+
+		closeAllEdits();
 
 		var question = $("#templates " + types[ type ]).clone(true);
 		question.appendTo("#container");
