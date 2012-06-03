@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$(".question-view .edit").click(function() {
+			$(".question-view .edit").on("click", function() {
 				var question = $(this).parent().parent();
 				var questionView = question.find(".question-view");
 				var questionEdit = question.find(".question-edit");
@@ -19,7 +19,7 @@
 				questionEdit.css("display", "block");
 			});
 
-			$(".question-edit .edit, .question-edit .done").click(function() {
+			$(".question-edit .edit, .question-edit .done").on("click", function() {
 				var question = $(this).parent().parent();
 				var questionView = question.find(".question-view");
 				var questionEdit = question.find(".question-edit");
@@ -33,39 +33,86 @@
 				questionEdit.css("display", "none");
 			});
 
-			$(".question .delete").click(function() {
+			$(".question .delete").on("click", function() {
 				if( confirm( "Er du sikker på at du vil slette dette spørsmålet?" ) ) {
 					$(this).parent().parent().remove();
 				}
 			});
 
 			$("#container").sortable({ placeholder: 'sortable-placeholder' });
+
+
+
+			$(".question").on("mouseenter", function() {
+				if( $(".question").find(".question-view").css("display") == "block" ) {
+					$(this).css("background", "#fff9dd");
+				}
+			});
+			$(".question").on("mouseleave", function() {
+				if( $(".question").find(".question-view").css("display") == "block" ) {
+					$(this).css("background", "white");
+				}
+			});
+
+
+
+			$("#add-text").on("click", function() {
+				var question = $("#templates .text-question").clone(true);
+				question.appendTo("#container");
+
+				var questionView = question.find(".question-view");
+				var questionEdit = question.find(".question-edit");
+
+				question.css("background", "#fff4c2");
+
+				questionView.css("display", "none");
+				questionEdit.css("display", "block");
+			});
+
+			$("#add-paragraph").on("click", function() {
+				var question = $("#templates .paragraph-question").clone(true);
+				question.appendTo("#container");
+
+				var questionView = question.find(".question-view");
+				var questionEdit = question.find(".question-edit");
+
+				question.css("background", "#fff4c2");
+
+				questionView.css("display", "none");
+				questionEdit.css("display", "block");
+			});
 		});
 	</script>
 </head>
 
 <body>
 
-<a href="#">test</a>
+<a href="#" id="add-text">Add text</a><br>
+<a href="#" id="add-paragraph">Add paragraph</a>
 
-<div id="container">
+
+<div id="container"></div>
+
+
+
+<div id="templates">
 	<div class="question text-question">
 		<div class="question-view">
 			<button class="delete"><img src="img/bin_closed.png"></button>
 			<button class="edit"><img src="img/pencil.png"></button>
-			<div class="title">Beskrivelse av bedriften</div>
-			<div class="help">Skriv en beskrivelse av bedriften med 10 linjer</div>
+			<div class="title"></div>
+			<div class="help"></div>
 			<input type="text" disabled="disabled"></textarea>
 		</div>
 		<div class="question-edit">
 			<button class="delete"><img src="img/bin_closed.png"></button>
 			<button class="edit"><img src="img/pencil.png"></button>
 			<div>
-				<label for="title">Tittel<label>
+				<label for="title">Tittel</label>
 				<input style="text" class="title">
 			</div>
 			<div>
-				<label for="help">Hjelpetekst<label>
+				<label for="help">Hjelpetekst</label>
 				<input style="text" class="help">
 			</div>
 			<p class="example">Brukerens svar</p>
@@ -79,20 +126,20 @@
 		<div class="question-view">
 			<button class="delete"><img src="img/bin_closed.png"></button>
 			<button class="edit"><img src="img/pencil.png"></button>
-			<div class="title">Beskrivelse av bedriften</div>
-			<div>Skriv en beskrivelse av bedriften med 10 linjer</div>
+			<div class="title"></div>
+			<div class="help"></div>
 			<textarea disabled="disabled"></textarea>
 		</div>
 		<div class="question-edit">
 			<button class="delete"><img src="img/bin_closed.png"></button>
 			<button class="edit"><img src="img/pencil.png"></button>
 			<div>
-				<label for="title">Tittel<label>
-				<input style="text" name="title">
+				<label for="title">Tittel</label>
+				<input style="text" class="title">
 			</div>
 			<div>
-				<label for="help">Hjelpetekst<label>
-				<input style="text" name="help">
+				<label for="help">Hjelpetekst</label>
+				<input style="text" class="help">
 			</div>
 			<p class="example">Brukerens svar</p>
 			<button class="done">Ferdig</button>
@@ -100,6 +147,9 @@
 	</div>
 
 </div>
+
+
+
 
 
 </body>
