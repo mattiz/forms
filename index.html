@@ -2,97 +2,21 @@
 
 <html>
 <head>
-	<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
 	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
 	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$(".question-view .edit").on("click", function() {
-				var question = $(this).parent().parent();
-				var questionView = question.find(".question-view");
-				var questionEdit = question.find(".question-edit");
-
-				question.css("background", "#fff4c2");
-
-				questionView.css("display", "none");
-				questionEdit.css("display", "block");
-			});
-
-			$(".question-edit .edit, .question-edit .done").on("click", function() {
-				var question = $(this).parent().parent();
-				var questionView = question.find(".question-view");
-				var questionEdit = question.find(".question-edit");
-
-				questionView.find(".title").html( questionEdit.find(".title").val() );
-				questionView.find(".help").html( questionEdit.find(".help").val() );
-
-				question.css("background", "white");
-
-				questionView.css("display", "block");
-				questionEdit.css("display", "none");
-			});
-
-			$(".question .delete").on("click", function() {
-				if( confirm( "Er du sikker på at du vil slette dette spørsmålet?" ) ) {
-					$(this).parent().parent().remove();
-				}
-			});
-
-			$("#container").sortable({ placeholder: 'sortable-placeholder' });
-
-
-
-			$(".question").on("mouseenter", function() {
-				if( $(".question").find(".question-view").css("display") == "block" ) {
-					$(this).css("background", "#fff9dd");
-				}
-			});
-			$(".question").on("mouseleave", function() {
-				if( $(".question").find(".question-view").css("display") == "block" ) {
-					$(this).css("background", "white");
-				}
-			});
-
-
-
-			$("#add-text").on("click", function() {
-				var question = $("#templates .text-question").clone(true);
-				question.appendTo("#container");
-
-				var questionView = question.find(".question-view");
-				var questionEdit = question.find(".question-edit");
-
-				question.css("background", "#fff4c2");
-
-				questionView.css("display", "none");
-				questionEdit.css("display", "block");
-			});
-
-			$("#add-paragraph").on("click", function() {
-				var question = $("#templates .paragraph-question").clone(true);
-				question.appendTo("#container");
-
-				var questionView = question.find(".question-view");
-				var questionEdit = question.find(".question-edit");
-
-				question.css("background", "#fff4c2");
-
-				questionView.css("display", "none");
-				questionEdit.css("display", "block");
-			});
-		});
-	</script>
+	<script type="text/javascript" src="js/forms.js"></script>
 </head>
 
 <body>
+
 
 <a href="#" id="add-text">Add text</a><br>
 <a href="#" id="add-paragraph">Add paragraph</a>
 
 
 <div id="container"></div>
-
 
 
 <div id="templates">
@@ -119,7 +43,6 @@
 			<button class="done">Ferdig</button>
 		</div>
 	</div>
-
 
 
 	<div class="question paragraph-question">
@@ -149,9 +72,5 @@
 </div>
 
 
-
-
-
 </body>
-
 </html>
