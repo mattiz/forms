@@ -7,6 +7,21 @@
 	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
 	<script type="text/javascript" src="js/forms.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#container").forms();
+
+
+			$("#add-text").on("click", function() {
+				$("#container").forms("add", "text");
+			});
+
+
+			$("#add-paragraph").on("click", function() {
+				$("#container").forms("add", "paragraph");
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -17,59 +32,6 @@
 
 
 <div id="container"></div>
-
-
-<div id="templates">
-	<div class="question text-question">
-		<div class="question-view">
-			<button class="delete"><img src="img/bin_closed.png"></button>
-			<button class="edit"><img src="img/pencil.png"></button>
-			<div class="title"></div>
-			<div class="help"></div>
-			<input type="text" disabled="disabled"></textarea>
-		</div>
-		<div class="question-edit">
-			<button class="delete"><img src="img/bin_closed.png"></button>
-			<button class="edit"><img src="img/pencil.png"></button>
-			<div>
-				<label for="title">Tittel</label>
-				<input style="text" class="title">
-			</div>
-			<div>
-				<label for="help">Hjelpetekst</label>
-				<input style="text" class="help">
-			</div>
-			<p class="example">Brukerens svar</p>
-			<button class="done">Ferdig</button>
-		</div>
-	</div>
-
-
-	<div class="question paragraph-question">
-		<div class="question-view">
-			<button class="delete"><img src="img/bin_closed.png"></button>
-			<button class="edit"><img src="img/pencil.png"></button>
-			<div class="title"></div>
-			<div class="help"></div>
-			<textarea disabled="disabled"></textarea>
-		</div>
-		<div class="question-edit">
-			<button class="delete"><img src="img/bin_closed.png"></button>
-			<button class="edit"><img src="img/pencil.png"></button>
-			<div>
-				<label for="title">Tittel</label>
-				<input style="text" class="title">
-			</div>
-			<div>
-				<label for="help">Hjelpetekst</label>
-				<input style="text" class="help">
-			</div>
-			<p class="example">Brukerens svar</p>
-			<button class="done">Ferdig</button>
-		</div>
-	</div>
-
-</div>
 
 
 </body>
