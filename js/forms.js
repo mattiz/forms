@@ -45,12 +45,34 @@
 		var questionView = question.find(".question-view");
 		var questionEdit = question.find(".question-edit");
 
-		// Copy data
+		// Render title and help text
 		questionView.find(".title").html( questionEdit.find(".title").val() );
 		questionView.find(".help").html( questionEdit.find(".help").val() );
 
-		question.css("background", "white");
+		// Render multiple choice question
+		if( question.hasClass('multiple-choice-question') ) {
+			var option = $(
+				'<li> \
+					<input type="radio" name="radio-preview"> \
+					<span class="description" /> \
+				</li>'
+			);
 
+			// Remove old options
+			questionView.find('.options').children().remove();
+
+			// Add new options
+			questionEdit.find(".options .option").each(function(index) {
+				var fromValue = $(this).find('.text-preview').val();
+
+				var optionWithText = option.clone();
+				optionWithText.find('.description').text( fromValue );
+
+				optionWithText.appendTo( questionView.find('.options') );
+			});
+		}
+		
+		question.css("background", "white");
 		questionView.css("display", "block");
 		questionEdit.css("display", "none");
 	}
@@ -80,6 +102,9 @@
 	var add = function( type ) {
 		closeAllEdits();
 
+		// ----------------------------------------------------------------------
+		// Text question
+		// ----------------------------------------------------------------------
 		var textQuestion = $(
 			'<div class="question text-question"> \
 				<div class="question-view"> \
@@ -107,6 +132,9 @@
 		);
 
 
+		// ----------------------------------------------------------------------
+		// Paragraph question
+		// ----------------------------------------------------------------------
 		var paragraphQuestion = $(
 			'<div class="question paragraph-question"> \
 				<div class="question-view"> \
@@ -134,9 +162,87 @@
 		);
 
 
+		// ----------------------------------------------------------------------
+		// Multiple choice question
+		// ----------------------------------------------------------------------
+		var multipleChoiceQuestion = $(
+			'<div class="question multiple-choice-question"> \
+				<div class="question-view"> \
+					<button class="delete"><img src="img/bin_closed.png"></button> \
+					<button class="edit"><img src="img/pencil.png"></button> \
+					<div class="title"></div> \
+					<div class="help"></div> \
+					<ul class="options"> \
+						<li> \
+							<input type="radio" name="radio-preview"> \
+							Dette er en tekst \
+						</li> \
+						<li> \
+							<input type="radio" name="radio-preview"> \
+							Dette er en tekst \
+						</li> \
+					</ul> \
+				</div> \
+				\
+				<div class="question-edit"> \
+					<button class="delete"><img src="img/bin_closed.png"></button> \
+					<button class="edit"><img src="img/pencil.png"></button> \
+					<div> \
+						<label for="title">Tittel</label> \
+						<input style="text" class="title"> \
+					</div> \
+					<div> \
+						<label for="help">Hjelpetekst</label> \
+						<input style="text" class="help"> \
+					</div> \
+					<ul class="options"> \
+						<li class="option"> \
+							<input type="radio" name="radio-preview"> \
+							<input type="text" class="text-preview" value="Eksempel tekst ama"> \
+							<a href="#" class="remove-option">x</a> \
+						</li> \
+						<li class="add-option"> \
+							<input type="radio" name="radio-preview"> \
+							<input type="text" class="text-preview" value="Click to add option"> \
+						</li> \
+					</ul> \
+					<button class="done">Ferdig</button> \
+				</div> \
+			</div>'
+		);
+
+		/*
+		 * Insert new option
+		 */
+		$(document).on('click', '.add-option', function() {
+			var option = $(
+			'<li class="option"> \
+				<input type="radio" name="radio-previw"> \
+				<input type="text" class="text-preview" value=""> \
+				<a href="#" class="remove-option">x</a> \
+			</li>'
+			);
+
+			// Insert new option and give ut focus
+			option.insertBefore( $(this) );
+			$(this).prev().find('.text-preview').focus();
+		});
+
+		/*
+		 * Remove option
+		 */
+		$(document).on('click', '.remove-option', function() {
+			$(this).parent().remove();
+		});
+
+
+
+
+
 		var types = {
 			text     : textQuestion,
-			paragraph: paragraphQuestion
+			paragraph: paragraphQuestion,
+			multiplechoice : multipleChoiceQuestion
 		};
 
 		var question = types[ type ];

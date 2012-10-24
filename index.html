@@ -20,6 +20,12 @@
 			$("#add-paragraph").on("click", function() {
 				$("#container").forms("add", "paragraph");
 			});
+
+			$("#add-multiplechoice").on("click", function() {
+				$("#container").forms("add", "multiplechoice");
+			});
+
+			//$("#container").forms("add", "multiplechoice");
 		});
 	</script>
 </head>
@@ -28,7 +34,8 @@
 
 
 <a href="#" id="add-text">Add text</a><br>
-<a href="#" id="add-paragraph">Add paragraph</a>
+<a href="#" id="add-paragraph">Add paragraph</a><br>
+<a href="#" id="add-multiplechoice">Add multiple choice</a>
 
 
 <div id="container"></div>
