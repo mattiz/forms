@@ -18,7 +18,7 @@
 			<div class="question-view" data-bind="visible: !editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
-				
+
 				<div class="title" data-bind="text: title"></div>
 				<div class="help" data-bind="text: description"></div>
 				<input type="text" disabled="disabled"></textarea>
@@ -204,12 +204,19 @@
 		        ]);
 
 		        this.addQuestion = function( question ) {
-		        	this.questions.push( ko.observable( question ) );
+		        	this.questions.push( question );
 		        };
 
 		        this.removeQuestion = function( question ) {
 		        	this.questions.remove( question );
+
 		        }.bind(this);
+
+		        this.addText = function() {
+		        	var newQuestion = new Question("", "", 'singleline');
+					newQuestion.edit();
+					this.addQuestion( newQuestion );
+		        }
 			}
 
 
@@ -236,11 +243,6 @@
 				}
 			});
 
-			$("#add-text").on("click", function() {
-				var newQuestion = new Question("", "", 'singleline');
-				newQuestion.edit();
-				viewModel.addQuestion( newQuestion );
-			});
 
 
 
@@ -254,17 +256,14 @@
 <body>
 
 
+<div>
+	<a href="#" data-bind="click: addText">Add text</a>
 
-<div id="container" data-bind="foreach: questions, sortableList: questions">
-    <div data-bind="template: { name: type() }"></div>
+	<div id="container" data-bind="foreach: questions, sortableList: questions">
+	    <div data-bind="template: { name: type() }"></div>
+	</div>
 </div>
 
-
-
-<br><br>
-<a href="#" id="add-text">Add text</a><br>
-<a href="#" id="add-paragraph">Add paragraph</a><br>
-<a href="#" id="add-multiplechoice">Add multiple choice</a>
 
 
 </body>
