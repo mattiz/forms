@@ -34,15 +34,18 @@ label {
 	margin-top: -2px;
 }
 
+/* Align attachment checkbox */
 .question-edit p input {
     vertical-align: middle;
     margin: 0;
 }
 
-.question .question-edit {
-	/*display: none;*/
+/* Bold text for the edit labels */
+.question-edit div label {
+	font-weight: bold;
 }
 
+/* Preview for textarea */
 .question textarea {
 	height: 100px;
 	width: 80%;
