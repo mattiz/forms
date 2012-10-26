@@ -2,43 +2,267 @@
 
 <html>
 <head>
+	<meta charset="UTF-8">
+
 	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
 	<link type="text/css" href="css/style.css" rel="stylesheet" />
 	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
-	<script type="text/javascript" src="js/forms.js"></script>
+	<script type="text/javascript" src="js/knockout.js"></script>
+
+	
+
+	<script id="singleline" type="text/html">
+    	<div class="question text-question">
+    		<!-- Preview -->
+			<div class="question-view" data-bind="visible: !editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				<div class="title" data-bind="text: title"></div>
+				<div class="help" data-bind="text: description"></div>
+				<input type="text" disabled="disabled"></textarea>
+			</div>
+
+			<!-- Edit -->
+			<div class="question-edit" data-bind="visible: editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				<div>
+					<label for="title">Tittel</label>
+					<input style="text" class="title" data-bind="value: title">
+				</div>
+				<div>
+					<label for="help">Hjelpetekst</label>
+					<input style="text" class="help" data-bind="value: description">
+				</div>
+				<p class="example">Brukerens svar</p>
+				<button class="done" data-bind="click: edit">Ferdig</button>
+			</div>
+		</div>
+	</script>
+
+
+	<script id="paragraph" type="text/html">
+	    <div class="question paragraph-question">
+	    	<!-- Preview -->
+			<div class="question-view" data-bind="visible: !editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				<div class="title" data-bind="text: title"></div>
+				<div class="help" data-bind="text: description"></div>
+				<textarea disabled="disabled"></textarea>
+			</div>
+
+			<!-- Edit -->
+			<div class="question-edit" data-bind="visible: editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				<div>
+					<label for="title">Tittel</label>
+					<input style="text" class="title" data-bind="value: title">
+				</div>
+				<div>
+					<label for="help">Hjelpetekst</label>
+					<input style="text" class="help" data-bind="value: description">
+				</div>
+				<p class="example">Brukerens svar</p>
+				<button class="done" data-bind="click: edit">Ferdig</button>
+			</div>
+		</div>
+	</script>
+
+
+	<script id="multiplechoice" type="text/html">
+		<div class="question multiple-choice-question">
+			<!-- Preview -->
+			<div class="question-view" data-bind="visible: !editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				<div class="title" data-bind="text: title"></div>
+				<div class="help" data-bind="text: description"></div>
+
+				<ul class="options" data-bind="foreach: options">
+					<li>
+						<input type="radio" name="radio-preview">
+						<span data-bind="text: name"></span>
+					</li>
+				</ul>
+			</div>
+			
+			<!-- Edit -->
+			<div class="question-edit" data-bind="visible: editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				<div>
+					<label for="title">Tittel</label>
+					<input style="text" class="title" data-bind="value: title">
+				</div>
+				<div>
+					<label for="help">Hjelpetekst</label>
+					<input style="text" class="help" data-bind="value: description">
+				</div>
+
+				<div class="options-container">
+					<ul class="options" data-bind="foreach: options">
+						<li class="option">
+							<input type="radio" name="radio-preview">
+							<input type="text" class="text-preview" data-bind="value: name">
+							<a href="#" class="remove-option" data-bind="click: $parent.removeOption, visible: $parent.moreThanOneOption()">x</a>
+						</li>
+					</ul>
+					<ul class="options">
+						<li class="add-option" data-bind="click: addOption">
+							<input type="radio" name="radio-preview">
+							<input type="text" class="text-preview" value="Click to add option...">
+						</li>
+					</ul>
+				</div>
+
+				<button class="done" data-bind="click: edit">Ferdig</button>
+			</div>
+		</div>
+	</script>
+
+
+
 	<script>
 		$(document).ready(function() {
-			$("#container").forms();
 
+			ko.bindingHandlers.sortableList = {
+				init: function(element, valueAccessor) {
+					var list = valueAccessor();
+					$(element).sortable({
+						update: function(event, ui) {
+							//retrieve our actual data item
+							var item = ui.item.tmplItem().data;
+
+							//figure out its new position
+							var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
+
+							//remove the item and add it back in the right spot
+							if (position >= 0) {
+								list.remove(item);
+								list.splice(position, 0, item);
+							}
+						},
+						placeholder: 'sortable-placeholder'
+					});
+				}
+			};
+
+
+
+			var Option = function(name) {
+			    this.name = ko.observable(name);
+			}
+
+
+			var Question = function(title, description, type) {
+				self = this;
+
+			    self.title       = ko.observable(title);
+			    self.description = ko.observable(description);
+			    self.type        = ko.observable(type);
+			    self.editMode    = ko.observable(false);
+			    self.options     = ko.observableArray([
+			    	new Option("test"),
+			    	new Option("test2")
+			    ]);
+
+			    self.edit = function() {
+			        self.editMode( ! self.editMode() );
+			    }
+
+			    self.addOption = function() {
+			        self.options.push( new Option("") );
+
+			        // Set focus to the last option added
+			        $('.options-container .option input[type=text]').last().focus();
+			    }
+
+			    self.removeOption = function( option ) {
+			        self.options.remove( option );
+			    }
+
+			    self.moreThanOneOption = function() {
+			    	return self.options().length > 1;
+			    }
+			}
+
+
+
+
+			function ViewModel() {
+				self = this;
+
+				self.questions = ko.observableArray([
+			        new Question("Annabelle", "Beskrivelse", 'singleline'),
+			        new Question("Bertie", "Beskrivelse", 'paragraph'),
+			        new Question("Charles", "Beskrivelse", 'multiplechoice')
+		        ]);
+
+		        self.addQuestion = function( question ) {
+		        	self.questions.push( ko.observable( question ) );
+		        };
+
+		        self.removeQuestion = function( question ) {
+		        	self.questions.remove( question );
+		        };
+			}
+
+
+
+			var viewModel = new ViewModel()
+			ko.applyBindings( viewModel );
+
+
+
+
+
+
+
+			// Change color on mouse over
+			$(document).on('mouseenter', '.question', function() {
+				if( $(this).find(".question-view").css("display") == "block" ) {
+					$(this).css("background", "#fff9dd");
+				}
+			});
+
+			$(document).on('mouseleave', '.question', function() {
+				if( $(this).find(".question-view").css("display") == "block" ) {
+					$(this).css("background", "white");
+				}
+			});
 
 			$("#add-text").on("click", function() {
-				$("#container").forms("add", "text");
+				var newQuestion = new Question("", "", 'singleline');
+				newQuestion.edit();
+				viewModel.addQuestion( newQuestion );
 			});
 
 
-			$("#add-paragraph").on("click", function() {
-				$("#container").forms("add", "paragraph");
-			});
 
-			$("#add-multiplechoice").on("click", function() {
-				$("#container").forms("add", "multiplechoice");
-			});
-
-			//$("#container").forms("add", "multiplechoice");
 		});
+
+
+		
 	</script>
 </head>
 
 <body>
 
 
+
+<div id="container" data-bind="foreach: questions, sortableList: questions">
+    <div data-bind="template: { name: type() }"></div>
+</div>
+
+
+
+<br><br>
 <a href="#" id="add-text">Add text</a><br>
 <a href="#" id="add-paragraph">Add paragraph</a><br>
 <a href="#" id="add-multiplechoice">Add multiple choice</a>
-
-
-<div id="container"></div>
 
 
 </body>

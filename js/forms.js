@@ -7,6 +7,7 @@
 		// Make questions sortable
 		$("#container").sortable({ placeholder: 'sortable-placeholder' });
 
+		/*
 		// Edit button in view mode
 		$(document).on('click', '.question-view .edit', function() {
 			closeAllEdits();
@@ -26,6 +27,7 @@
 			}
 		});
 
+
 		// Change color on mouse over
 		$(document).on('mouseenter', '.question', function() {
 			if( $(this).find(".question-view").css("display") == "block" ) {
@@ -38,6 +40,7 @@
 				$(this).css("background", "white");
 			}
 		});
+		*/
 	}
 
 

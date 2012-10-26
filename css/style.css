@@ -29,7 +29,7 @@ label {
 }
 
 .question .question-edit {
-	display: none;
+	/*display: none;*/
 }
 
 .question textarea {
@@ -41,9 +41,11 @@ label {
 	float: right;
 }
 
+/*
 #templates {
 	display: none;
 }
+*/
 
 /**
  * Text
@@ -76,6 +78,16 @@ label {
 	height: 100px;
 	text-align: center;
 	line-height: 90px;
+}
+
+.options-container {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.options {
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 .options li {
