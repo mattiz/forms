@@ -158,34 +158,32 @@
 
 
 			var Question = function(title, description, type) {
-				self = this;
-
-			    self.title       = ko.observable(title);
-			    self.description = ko.observable(description);
-			    self.type        = ko.observable(type);
-			    self.editMode    = ko.observable(false);
-			    self.options     = ko.observableArray([
+			    this.title       = ko.observable(title);
+			    this.description = ko.observable(description);
+			    this.type        = ko.observable(type);
+			    this.editMode    = ko.observable(false);
+			    this.options     = ko.observableArray([
 			    	new Option("test"),
 			    	new Option("test2")
 			    ]);
 
-			    self.edit = function() {
-			        self.editMode( ! self.editMode() );
+			    this.edit = function() {
+			        this.editMode( ! this.editMode() );
 			    }
 
-			    self.addOption = function() {
-			        self.options.push( new Option("") );
+			    this.addOption = function() {
+			        this.options.push( new Option("") );
 
 			        // Set focus to the last option added
 			        $('.options-container .option input[type=text]').last().focus();
 			    }
 
-			    self.removeOption = function( option ) {
-			        self.options.remove( option );
-			    }
+			    this.removeOption = function( option ) {
+			        this.options.remove( option );
+			    }.bind(this);
 
-			    self.moreThanOneOption = function() {
-			    	return self.options().length > 1;
+			    this.moreThanOneOption = function() {
+			    	return this.options().length > 1;
 			    }
 			}
 
@@ -193,21 +191,19 @@
 
 
 			function ViewModel() {
-				self = this;
-
-				self.questions = ko.observableArray([
+				this.questions = ko.observableArray([
 			        new Question("Annabelle", "Beskrivelse", 'singleline'),
 			        new Question("Bertie", "Beskrivelse", 'paragraph'),
 			        new Question("Charles", "Beskrivelse", 'multiplechoice')
 		        ]);
 
-		        self.addQuestion = function( question ) {
-		        	self.questions.push( ko.observable( question ) );
+		        this.addQuestion = function( question ) {
+		        	this.questions.push( ko.observable( question ) );
 		        };
 
-		        self.removeQuestion = function( question ) {
-		        	self.questions.remove( question );
-		        };
+		        this.removeQuestion = function( question ) {
+		        	this.questions.remove( question );
+		        }.bind(this);
 			}
 
 
