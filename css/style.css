@@ -41,12 +41,6 @@ label {
 	float: right;
 }
 
-/*
-#templates {
-	display: none;
-}
-*/
-
 /**
  * Text
  */
@@ -92,6 +86,35 @@ label {
 
 .options li {
 	list-style: none;
+	margin-top: 4px;
+	margin-left: 4px;
+}
+
+.options li input {
+    vertical-align: middle;
+    margin: 0;
+}
+
+/* Cross used to remove options */
+.options li a {
+    text-decoration: none;
+    display: inline-block;
+    margin-left: 0px;
+
+    border-radius: 100px; 
+	-moz-border-radius: 100px; 
+	-webkit-border-radius: 100px;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-bottom: 1px;
+	font-size: 10px;
+	
+	
+}
+
+.options li a:hover {
+    background-color: #bbbbbb;
+	color: white;
 }
 
 ul.options {

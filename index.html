@@ -18,6 +18,7 @@
 			<div class="question-view" data-bind="visible: !editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+				
 				<div class="title" data-bind="text: title"></div>
 				<div class="help" data-bind="text: description"></div>
 				<input type="text" disabled="disabled"></textarea>
@@ -27,6 +28,7 @@
 			<div class="question-edit" data-bind="visible: editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+
 				<div>
 					<label for="title">Tittel</label>
 					<input style="text" class="title" data-bind="value: title">
@@ -48,6 +50,7 @@
 			<div class="question-view" data-bind="visible: !editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+
 				<div class="title" data-bind="text: title"></div>
 				<div class="help" data-bind="text: description"></div>
 				<textarea disabled="disabled"></textarea>
@@ -57,6 +60,7 @@
 			<div class="question-edit" data-bind="visible: editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+
 				<div>
 					<label for="title">Tittel</label>
 					<input style="text" class="title" data-bind="value: title">
@@ -78,6 +82,7 @@
 			<div class="question-view" data-bind="visible: !editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+
 				<div class="title" data-bind="text: title"></div>
 				<div class="help" data-bind="text: description"></div>
 
@@ -93,6 +98,7 @@
 			<div class="question-edit" data-bind="visible: editMode()">
 				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
+
 				<div>
 					<label for="title">Tittel</label>
 					<input style="text" class="title" data-bind="value: title">
@@ -163,8 +169,8 @@
 			    this.type        = ko.observable(type);
 			    this.editMode    = ko.observable(false);
 			    this.options     = ko.observableArray([
-			    	new Option("test"),
-			    	new Option("test2")
+			    	new Option("Det forste alternativet"),
+			    	new Option("Det andre alternativet")
 			    ]);
 
 			    this.edit = function() {
