@@ -28,6 +28,17 @@ label {
 	font-weight: bold;
 }
 
+/* Align attachment icon */
+.question-view p img {
+	vertical-align: middle;
+	margin-top: -2px;
+}
+
+.question-edit p input {
+    vertical-align: middle;
+    margin: 0;
+}
+
 .question .question-edit {
 	/*display: none;*/
 }
@@ -90,6 +101,7 @@ label {
 	margin-left: 4px;
 }
 
+/* Align options in preview */
 .options li input {
     vertical-align: middle;
     margin: 0;

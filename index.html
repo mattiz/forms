@@ -22,6 +22,10 @@
 				<div class="title" data-bind="text: title"></div>
 				<div class="help" data-bind="text: description"></div>
 				<input type="text" disabled="disabled"></textarea>
+
+				<p data-bind="visible: requireAttachment()">
+					<img src="img/attach.png"> Requires attachment
+				</p>
 			</div>
 
 			<!-- Edit -->
@@ -30,15 +34,20 @@
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
 
 				<div>
-					<label for="title">Tittel</label>
+					<label for="title">Question Title</label>
 					<input style="text" class="title" data-bind="value: title">
 				</div>
 				<div>
-					<label for="help">Hjelpetekst</label>
+					<label for="help">Help Text</label>
 					<input style="text" class="help" data-bind="value: description">
 				</div>
-				<p class="example">Brukerens svar</p>
-				<button class="done" data-bind="click: edit">Ferdig</button>
+				<p class="example">Their answer</p>
+
+				<p>
+					<input type="checkbox" data-bind="checked: requireAttachment"> Requires attachment
+				</p>
+
+				<button class="done" data-bind="click: edit">Done</button>
 			</div>
 		</div>
 	</script>
@@ -54,6 +63,10 @@
 				<div class="title" data-bind="text: title"></div>
 				<div class="help" data-bind="text: description"></div>
 				<textarea disabled="disabled"></textarea>
+
+				<p data-bind="visible: requireAttachment()">
+					<img src="img/attach.png"> Requires attachment
+				</p>
 			</div>
 
 			<!-- Edit -->
@@ -62,15 +75,20 @@
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
 
 				<div>
-					<label for="title">Tittel</label>
+					<label for="title">Question Title</label>
 					<input style="text" class="title" data-bind="value: title">
 				</div>
 				<div>
-					<label for="help">Hjelpetekst</label>
+					<label for="help">Help Text</label>
 					<input style="text" class="help" data-bind="value: description">
 				</div>
-				<p class="example">Brukerens svar</p>
-				<button class="done" data-bind="click: edit">Ferdig</button>
+				<p class="example">Their longer answer</p>
+
+				<p>
+					<input type="checkbox" data-bind="checked: requireAttachment"> Requires attachment
+				</p>
+
+				<button class="done" data-bind="click: edit">Done</button>
 			</div>
 		</div>
 	</script>
@@ -92,6 +110,10 @@
 						<span data-bind="text: name"></span>
 					</li>
 				</ul>
+
+				<p data-bind="visible: requireAttachment()">
+					<img src="img/attach.png"> Requires attachment
+				</p>
 			</div>
 			
 			<!-- Edit -->
@@ -100,11 +122,11 @@
 				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
 
 				<div>
-					<label for="title">Tittel</label>
+					<label for="title">Question Title</label>
 					<input style="text" class="title" data-bind="value: title">
 				</div>
 				<div>
-					<label for="help">Hjelpetekst</label>
+					<label for="help">Help Text</label>
 					<input style="text" class="help" data-bind="value: description">
 				</div>
 
@@ -124,7 +146,11 @@
 					</ul>
 				</div>
 
-				<button class="done" data-bind="click: edit">Ferdig</button>
+				<p>
+					<input type="checkbox" data-bind="checked: requireAttachment"> Requires attachment
+				</p>
+
+				<button class="done" data-bind="click: edit">Done</button>
 			</div>
 		</div>
 	</script>
@@ -172,6 +198,7 @@
 			    	new Option("Det forste alternativet"),
 			    	new Option("Det andre alternativet")
 			    ]);
+			    this.requireAttachment = ko.observable(false);
 
 			    this.edit = function() {
 			        this.editMode( ! this.editMode() );
