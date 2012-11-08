@@ -55,6 +55,10 @@ label {
 	float: right;
 }
 
+div.help {
+	color: #666;
+}
+
 /**
  * Text
  */
@@ -141,3 +145,16 @@ ul.options {
 	cursor: pointer;
 	color: #cfcfcf;
 }
+
+/*
+ * Scale
+ */
+.scale-question table {
+	border-collapse: collapse;
+}
+
+ .scale-question table tr td {
+ 	text-align: center;
+ 	border-bottom: 1px solid #D3D8D3;
+ 	padding: .5em .25em
+ }

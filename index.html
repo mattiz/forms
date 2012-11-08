@@ -6,11 +6,12 @@
 
 	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
 	<link type="text/css" href="css/style.css" rel="stylesheet" />
+
 	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
 	<script type="text/javascript" src="js/knockout.js"></script>
+	<script type="text/javascript" src="js/forms.js"></script>
 
-	
 
 	<script id="singleline" type="text/html">
     	<div class="question text-question">
@@ -221,128 +222,106 @@
 	</script>
 
 
+	<script id="scale" type="text/html">
+    	<div class="question scale-question">
+    		<!-- Preview -->
+			<div class="question-view" data-bind="visible: !editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
 
-	<script>
-		$(document).ready(function() {
+				<div class="title" data-bind="text: title"></div>
+				<div class="help" data-bind="text: description"></div>
+				
+				<table>
+					<tbody>
+						<tr>
+							<td></td>
 
-			ko.bindingHandlers.sortableList = {
-				init: function(element, valueAccessor) {
-					var list = valueAccessor();
-					$(element).sortable({
-						update: function(event, ui) {
-							//retrieve our actual data item
-							var item = ui.item.tmplItem().data;
+							<!-- ko foreach: ko.utils.range(fromScale, toScale) -->
+							<td align="center" data-bind="text: $data"></td>
+							<!-- /ko -->
 
-							//figure out its new position
-							var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
+							<td></td>
+						</tr>
+						<tr>
+							<td data-bind="text: fromScaleLabel"></td>
 
-							//remove the item and add it back in the right spot
-							if (position >= 0) {
-								list.remove(item);
-								list.splice(position, 0, item);
-							}
-						},
-						placeholder: 'sortable-placeholder'
-					});
-				}
-			};
+							<!-- ko foreach: ko.utils.range(fromScale, toScale) -->
+							<td align="center"><input type="radio" name="scale-radio-preview"></td>
+							<!-- /ko -->
 
+							<td data-bind="text: toScaleLabel"></td>
+						</tr>
+					</tbody>
+				</table>
 
-
-			var Option = function(name) {
-			    this.name = ko.observable(name);
-			}
-
-
-			var Question = function(title, description, type) {
-			    this.title       = ko.observable(title);
-			    this.description = ko.observable(description);
-			    this.type        = ko.observable(type);
-			    this.editMode    = ko.observable(false);
-			    this.options     = ko.observableArray([
-			    	new Option("Det forste alternativet"),
-			    	new Option("Det andre alternativet")
-			    ]);
-			    this.requireAttachment = ko.observable(false);
-
-			    this.edit = function() {
-			        this.editMode( ! this.editMode() );
-			    }
-
-			    this.addOption = function() {
-			        this.options.push( new Option("") );
-
-			        // Set focus to the last option added
-			        $('.options-container .option input[type=text]').last().focus();
-			    }
-
-			    this.removeOption = function( option ) {
-			        this.options.remove( option );
-			    }.bind(this);
-
-			    this.moreThanOneOption = function() {
-			    	return this.options().length > 1;
-			    }
-			}
+				<p data-bind="visible: requireAttachment()">
+					<img src="img/attach.png"> Requires attachment
+				</p>
+			</div>
 
 
+			<!-- Edit -->
+			<div class="question-edit" data-bind="visible: editMode()">
+				<button class="delete" data-bind="click: $parent.removeQuestion"><img src="img/bin_closed.png"></button>
+				<button class="edit" data-bind="click: edit"><img src="img/pencil.png"></button>
 
+				<div>
+					<label for="title">Question Title</label>
+					<input style="text" class="title" data-bind="value: title">
+				</div>
+				<div>
+					<label for="help">Help Text</label>
+					<input style="text" class="help" data-bind="value: description">
+				</div>
 
-			function ViewModel() {
-				this.questions = ko.observableArray([
-			        new Question("Annabelle", "Beskrivelse", 'singleline'),
-			        new Question("Bertie", "Beskrivelse", 'paragraph'),
-			        new Question("Charles", "Beskrivelse", 'multiplechoice'),
-			        new Question("Deveraux", "Beskrivelse", 'checkboxes')
-		        ]);
+				<p />
 
-		        this.addQuestion = function( question ) {
-		        	this.questions.push( question );
-		        };
+				<div>
+					<label for="scale">Scale</label>
+					<select data-bind="value: fromScale">
+						<option value="0">0</option>
+						<option value="1">1</option>
+					</select>
 
-		        this.removeQuestion = function( question ) {
-		        	this.questions.remove( question );
+					to
 
-		        }.bind(this);
+					<select data-bind="value: toScale">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5" selected>5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>					
+				</div>
 
-		        this.addText = function() {
-		        	var newQuestion = new Question("", "", 'singleline');
-					newQuestion.edit();
-					this.addQuestion( newQuestion );
-		        }
-			}
+				<p />
 
+				<div>
+					<label>Labels:</label>
+				</div>
 
+				<p>
+					<div>
+						<span data-bind="text: fromScale" />: <input type="text" data-bind="value: fromScaleLabel">
+					</div>
+					<div>
+						<span data-bind="text: toScale" />: <input type="text" data-bind="value: toScaleLabel">
+					</div>
+				</p>
 
-			var viewModel = new ViewModel()
-			ko.applyBindings( viewModel );
+				<p>
+					<input type="checkbox" data-bind="checked: requireAttachment"> Requires attachment
+				</p>
 
-
-
-
-
-
-
-			// Change color on mouse over
-			$(document).on('mouseenter', '.question', function() {
-				if( $(this).find(".question-view").css("display") == "block" ) {
-					$(this).css("background", "#fff9dd");
-				}
-			});
-
-			$(document).on('mouseleave', '.question', function() {
-				if( $(this).find(".question-view").css("display") == "block" ) {
-					$(this).css("background", "white");
-				}
-			});
-
-
-
-
-		});
-
-
-		
+				<button class="done" data-bind="click: edit">Done</button>
+			</div>
+		</div>
 	</script>
 </head>
 

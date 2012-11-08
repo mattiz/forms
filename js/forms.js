@@ -1,288 +1,119 @@
-(function( $ ){
+$(document).ready(function() {
 
-	// ----------------------------------------------------------------------
-	// Init plugin
-	// ----------------------------------------------------------------------
-	var init = function() {
-		// Make questions sortable
-		$("#container").sortable({ placeholder: 'sortable-placeholder' });
+	ko.bindingHandlers.sortableList = {
+		init: function(element, valueAccessor) {
+			var list = valueAccessor();
+			$(element).sortable({
+				update: function(event, ui) {
+					//retrieve our actual data item
+					var item = ui.item.tmplItem().data;
 
-		/*
-		// Edit button in view mode
-		$(document).on('click', '.question-view .edit', function() {
-			closeAllEdits();
-			editQuestion( $(this).parent().parent() );
-		});
+					//figure out its new position
+					var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
 
-		// Edit and Done button in edit mode
-		$(document).on('click', '.question-edit .edit, .question-edit .done', function() {
-			closeAllEdits();
-			viewQuestion( $(this).parent().parent() );
-		});
-
-		// Delete button
-		$(document).on('click', '.question .delete', function() {
-			if( confirm( "Er du sikker på at du vil slette dette spørsmålet?" ) ) {
-				$(this).parent().parent().remove();
-			}
-		});
-
-
-		// Change color on mouse over
-		$(document).on('mouseenter', '.question', function() {
-			if( $(this).find(".question-view").css("display") == "block" ) {
-				$(this).css("background", "#fff9dd");
-			}
-		});
-
-		$(document).on('mouseleave', '.question', function() {
-			if( $(this).find(".question-view").css("display") == "block" ) {
-				$(this).css("background", "white");
-			}
-		});
-		*/
-	}
-
-
-	var viewQuestion = function( question ) {
-		var questionView = question.find(".question-view");
-		var questionEdit = question.find(".question-edit");
-
-		// Render title and help text
-		questionView.find(".title").html( questionEdit.find(".title").val() );
-		questionView.find(".help").html( questionEdit.find(".help").val() );
-
-		// Render multiple choice question
-		if( question.hasClass('multiple-choice-question') ) {
-			var option = $(
-				'<li> \
-					<input type="radio" name="radio-preview"> \
-					<span class="description" /> \
-				</li>'
-			);
-
-			// Remove old options
-			questionView.find('.options').children().remove();
-
-			// Add new options
-			questionEdit.find(".options .option").each(function(index) {
-				var fromValue = $(this).find('.text-preview').val();
-
-				var optionWithText = option.clone();
-				optionWithText.find('.description').text( fromValue );
-
-				optionWithText.appendTo( questionView.find('.options') );
+					//remove the item and add it back in the right spot
+					if (position >= 0) {
+						list.remove(item);
+						list.splice(position, 0, item);
+					}
+				},
+				placeholder: 'sortable-placeholder'
 			});
 		}
-		
-		question.css("background", "white");
-		questionView.css("display", "block");
-		questionEdit.css("display", "none");
-	}
-
-
-	var editQuestion = function( question ) {
-		var questionView = question.find(".question-view");
-		var questionEdit = question.find(".question-edit");
-
-		question.css("background", "#fff4c2");
-
-		questionView.css("display", "none");
-		questionEdit.css("display", "block");
-	}
-
-
-	var closeAllEdits = function() {
-		$(".question").each(function() {
-			viewQuestion( $(this) );
-		});
-	}
-
-
-	// ----------------------------------------------------------------------
-	// Add question
-	// ----------------------------------------------------------------------
-	var add = function( type ) {
-		closeAllEdits();
-
-		// ----------------------------------------------------------------------
-		// Text question
-		// ----------------------------------------------------------------------
-		var textQuestion = $(
-			'<div class="question text-question"> \
-				<div class="question-view"> \
-					<button class="delete"><img src="img/bin_closed.png"></button> \
-					<button class="edit"><img src="img/pencil.png"></button> \
-					<div class="title"></div> \
-					<div class="help"></div> \
-					<input type="text" disabled="disabled"></textarea> \
-				</div> \
-				<div class="question-edit"> \
-					<button class="delete"><img src="img/bin_closed.png"></button> \
-					<button class="edit"><img src="img/pencil.png"></button> \
-					<div> \
-						<label for="title">Tittel</label> \
-						<input style="text" class="title"> \
-					</div> \
-					<div> \
-						<label for="help">Hjelpetekst</label> \
-						<input style="text" class="help"> \
-					</div> \
-					<p class="example">Brukerens svar</p> \
-					<button class="done">Ferdig</button> \
-				</div> \
-			</div>'
-		);
-
-
-		// ----------------------------------------------------------------------
-		// Paragraph question
-		// ----------------------------------------------------------------------
-		var paragraphQuestion = $(
-			'<div class="question paragraph-question"> \
-				<div class="question-view"> \
-					<button class="delete"><img src="img/bin_closed.png"></button> \
-					<button class="edit"><img src="img/pencil.png"></button> \
-					<div class="title"></div> \
-					<div class="help"></div> \
-					<textarea disabled="disabled"></textarea> \
-				</div> \
-				<div class="question-edit"> \
-					<button class="delete"><img src="img/bin_closed.png"></button> \
-					<button class="edit"><img src="img/pencil.png"></button> \
-					<div> \
-						<label for="title">Tittel</label> \
-						<input style="text" class="title"> \
-					</div> \
-					<div> \
-						<label for="help">Hjelpetekst</label> \
-						<input style="text" class="help"> \
-					</div> \
-					<p class="example">Brukerens svar</p> \
-					<button class="done">Ferdig</button> \
-				</div> \
-			</div>'
-		);
-
-
-		// ----------------------------------------------------------------------
-		// Multiple choice question
-		// ----------------------------------------------------------------------
-		var multipleChoiceQuestion = $(
-			'<div class="question multiple-choice-question"> \
-				<div class="question-view"> \
-					<button class="delete"><img src="img/bin_closed.png"></button> \
-					<button class="edit"><img src="img/pencil.png"></button> \
-					<div class="title"></div> \
-					<div class="help"></div> \
-					<ul class="options"> \
-						<li> \
-							<input type="radio" name="radio-preview"> \
-							Dette er en tekst \
-						</li> \
-						<li> \
-							<input type="radio" name="radio-preview"> \
-							Dette er en tekst \
-						</li> \
-					</ul> \
-				</div> \
-				\
-				<div class="question-edit"> \
-					<button class="delete"><img src="img/bin_closed.png"></button> \
-					<button class="edit"><img src="img/pencil.png"></button> \
-					<div> \
-						<label for="title">Tittel</label> \
-						<input style="text" class="title"> \
-					</div> \
-					<div> \
-						<label for="help">Hjelpetekst</label> \
-						<input style="text" class="help"> \
-					</div> \
-					<ul class="options"> \
-						<li class="option"> \
-							<input type="radio" name="radio-preview"> \
-							<input type="text" class="text-preview" value="Eksempel tekst ama"> \
-							<a href="#" class="remove-option">x</a> \
-						</li> \
-						<li class="add-option"> \
-							<input type="radio" name="radio-preview"> \
-							<input type="text" class="text-preview" value="Click to add option"> \
-						</li> \
-					</ul> \
-					<button class="done">Ferdig</button> \
-				</div> \
-			</div>'
-		);
-
-		/*
-		 * Insert new option
-		 */
-		$(document).on('click', '.add-option', function() {
-			var option = $(
-			'<li class="option"> \
-				<input type="radio" name="radio-previw"> \
-				<input type="text" class="text-preview" value=""> \
-				<a href="#" class="remove-option">x</a> \
-			</li>'
-			);
-
-			// Insert new option and give ut focus
-			option.insertBefore( $(this) );
-			$(this).prev().find('.text-preview').focus();
-		});
-
-		/*
-		 * Remove option
-		 */
-		$(document).on('click', '.remove-option', function() {
-			$(this).parent().remove();
-		});
-
-
-
-
-
-		var types = {
-			text     : textQuestion,
-			paragraph: paragraphQuestion,
-			multiplechoice : multipleChoiceQuestion
-		};
-
-		var question = types[ type ];
-
-
-		question.appendTo("#container");
-		question.css("background", "#fff4c2");
-
-		var questionView = question.find(".question-view");
-		var questionEdit = question.find(".question-edit");
-
-		questionView.css("display", "none");
-		questionEdit.css("display", "block");
-	}
-
-
-	// ----------------------------------------------------------------------
-	// Plumbing
-	// ----------------------------------------------------------------------
-	var methods = {
-		init : init,
-		add  : add
 	};
 
 
-	$.fn.forms = function( method ) {
-		if ( methods[method] ) {
-			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 
-		} else if ( typeof method === 'object' || ! method ) {
-			return methods.init.apply( this, arguments );
+	var Option = function(name) {
+	    this.name = ko.observable(name);
+	}
 
-		} else {
-			$.error( 'Method ' +  method + ' does not exist on jQuery.forms' );
+
+	var Question = function(title, description, type) {
+	    this.title       = ko.observable(title);
+	    this.description = ko.observable(description);
+	    this.type        = ko.observable(type);
+	    this.editMode    = ko.observable(false);
+	    this.options     = ko.observableArray([
+	    	new Option("Det forste alternativet"),
+	    	new Option("Det andre alternativet")
+	    ]);
+	    this.requireAttachment = ko.observable(false);
+	    this.fromScale         = ko.observable("1");
+	    this.toScale           = ko.observable("6");
+	    this.fromScaleLabel    = ko.observable("Glad!");
+	    this.toScaleLabel      = ko.observable("Sur!");
+
+	    this.edit = function() {
+	        this.editMode( ! this.editMode() );
+	    }
+
+	    this.addOption = function() {
+	        this.options.push( new Option("") );
+
+	        // Set focus to the last option added
+	        $('.options-container .option input[type=text]').last().focus();
+	    }
+
+	    this.removeOption = function( option ) {
+	        this.options.remove( option );
+	    }.bind(this);
+
+	    this.moreThanOneOption = function() {
+	    	return this.options().length > 1;
+	    }
+	}
+
+
+
+
+	function ViewModel() {
+		this.questions = ko.observableArray([
+	        new Question("Annabelle", "Beskrivelse", 'singleline'),
+	        new Question("Bertie", "Beskrivelse", 'paragraph'),
+	        new Question("Charles", "Beskrivelse", 'multiplechoice'),
+	        new Question("Deveraux", "Beskrivelse", 'checkboxes'),
+	        new Question("Excalibur", "Beskrivelse", 'scale')
+        ]);
+
+        this.addQuestion = function( question ) {
+        	this.questions.push( question );
+        };
+
+        this.removeQuestion = function( question ) {
+        	this.questions.remove( question );
+
+        }.bind(this);
+
+        this.addText = function() {
+        	var newQuestion = new Question("", "", 'singleline');
+			newQuestion.edit();
+			this.addQuestion( newQuestion );
+        }
+	}
+
+
+
+	var viewModel = new ViewModel()
+	ko.applyBindings( viewModel );
+
+
+
+
+
+
+
+	// Change color on mouse over
+	$(document).on('mouseenter', '.question', function() {
+		if( $(this).find(".question-view").css("display") == "block" ) {
+			$(this).css("background", "#fff9dd");
 		}
+	});
 
-		return this;
-	};
+	$(document).on('mouseleave', '.question', function() {
+		if( $(this).find(".question-view").css("display") == "block" ) {
+			$(this).css("background", "white");
+		}
+	});
 
-})( jQuery );
+});
